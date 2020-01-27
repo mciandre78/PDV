@@ -7,6 +7,8 @@ namespace pdv.Models {
         [Key]
         public int Id { get; set; }
 
+        public int IdPdv { get; set; }
+
         [Required (ErrorMessage = "Este campo é obrigatório")]
         public string Description { get; set; }
 

@@ -88,9 +88,9 @@ namespace pdv.Repos
                                  select b)
                                   .OrderByDescending(x => x.Value)
                                   .ToList();
-
+                        
             foreach (Bill bill in lBills)
-            {
+            {   
                 if (change >= bill.Value)
                 {
                     bill.Quantity = (int)(change / bill.Value);

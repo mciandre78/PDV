@@ -32,9 +32,22 @@ namespace pdv.Controllers
         [Route("")]
         public async Task<ActionResult<List<Bill>>> Post([FromBody] Pdv model)
         {
+            decimal change = model.AmountPaid - model.Price;
             
+            //Change limit
+            if (change >= 10000)
+                return null;
+
             this._UnitOfWork.PdvRepository.Add(model);
+            
             await this._UnitOfWork.Commit();
+            
+            List<Bill> lBills = this._UnitOfWork.BillRepository.CalculateChange(model);
+
+            foreach (Bill bill in lBills)
+                bill.IdPdv = model.Id;
+            
+            this._UnitOfWork.BillRepository.AddRange(lBills);
 
             return this._UnitOfWork.BillRepository.CalculateChange(model);
         }

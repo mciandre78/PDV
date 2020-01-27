@@ -33,6 +33,11 @@ namespace pdv.Services
             this._DbSet.Add(entity);
         }
 
+        public void AddRange(List<T> entity)
+        {
+            this._DbSet.AddRange(entity);
+        }
+
         public void Update(T entity)
         {
             this._DbSet.Attach(entity);
