@@ -40,16 +40,13 @@ namespace pdv.Controllers
 
             this._UnitOfWork.PdvRepository.Add(model);
             
-            await this._UnitOfWork.Commit();
-            
             List<Bill> lBills = this._UnitOfWork.BillRepository.CalculateChange(model);
 
-            foreach (Bill bill in lBills)
-                bill.IdPdv = model.Id;
-            
-            this._UnitOfWork.BillRepository.AddRange(lBills);
+            //this._UnitOfWork.BillRepository.AddRange(lBills);
 
-            return this._UnitOfWork.BillRepository.CalculateChange(model);
+            await this._UnitOfWork.Commit();
+
+            return lBills;
         }
     }
 }

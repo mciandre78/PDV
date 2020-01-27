@@ -1,2 +1,0 @@
-# PDV
-Desafio PDV

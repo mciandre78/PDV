@@ -17,61 +17,66 @@ namespace pdv.Repos
             this._DbContext = context;
         }
 
-        private void FillBillsData()
-        {
-            if (this._DbContext.Bills.Any())
-                return;
-
+        private void FillBillsData(int idPdv)
+        {            
             this._DbContext.Bills.AddRange(
                 new Bill
                 {
                     Description = "100 Reais",
                     EBillType = EnumBillType.EBillType.Bill,
+                    IdPdv = idPdv,
                     Value = 100
                 },
                 new Bill
                 {
                     Description = "50 Reais",
                     EBillType = EnumBillType.EBillType.Bill,
+                    IdPdv = idPdv,
                     Value = 50
                 },
                 new Bill
                 {
                     Description = "20 Reais",
                     EBillType = EnumBillType.EBillType.Bill,
+                    IdPdv = idPdv,
                     Value = 20
                 },
                 new Bill
                 {
                     Description = "10 Reais",
                     EBillType = EnumBillType.EBillType.Bill,
+                    IdPdv = idPdv,
                     Value = 10
                 },
                 new Bill
                 {
                     Description = "50 Centavos",
                     EBillType = EnumBillType.EBillType.Coin,
+                    IdPdv = idPdv,
                     Value = (decimal)0.5
                 },
                 new Bill
                 {
                     Description = "10 Centavos",
                     EBillType = EnumBillType.EBillType.Coin,
+                    IdPdv = idPdv,
                     Value = (decimal)0.10
                 },
                 new Bill
                 {
                     Description = "5 Centavos",
                     EBillType = EnumBillType.EBillType.Coin,
+                    IdPdv = idPdv,
                     Value = (decimal)0.05
                 },
                 new Bill
                 {
                     Description = "1 Centavo",
                     EBillType = EnumBillType.EBillType.Coin,
+                    IdPdv = idPdv,
                     Value = (decimal)0.01
                 }
-                );
+                ); ;
 
             this._DbContext.SaveChanges();
         }
@@ -79,7 +84,8 @@ namespace pdv.Repos
         public List<Bill> CalculateChange(Pdv pdv)
         {
 
-            FillBillsData();
+            FillBillsData(pdv.Id);
+
             decimal price = pdv.Price;
             decimal amount = pdv.AmountPaid;
             decimal change = amount - price;
