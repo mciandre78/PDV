@@ -26,8 +26,8 @@ namespace PDV
         {
             services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("DataBase"));
             services.AddScoped<DataContext, DataContext>();
-            services.AddScoped(serviceType: typeof(IUnitOfWork), implementationType: typeof(UnitOfWork));
-            services.AddScoped(serviceType: typeof(IRepository<>), implementationType: typeof(GenericRepository<>));
+            //services.AddScoped(serviceType: typeof(IUnitOfWork), implementationType: typeof(UnitOfWork));
+            //services.AddScoped(serviceType: typeof(IRepository<>), implementationType: typeof(GenericRepository<>));
 
             services.AddSwaggerGen(s => s.SwaggerDoc("v1", new OpenApiInfo { Title = "Desafio PDV", Version = "v1" }));
             services.AddControllers();

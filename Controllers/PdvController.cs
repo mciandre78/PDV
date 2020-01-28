@@ -6,45 +6,42 @@ using pdv.Models;
 using pdv.Contracts;
 using pdv.Repos;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
+using pdv.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace pdv.Controllers
 {
     [ApiController]
     [Route ("v1/pdv")]
     public class PdvController {
-
-        private readonly UnitOfWork _UnitOfWork;
-
-        public PdvController(IUnitOfWork unitOfWork)
-        {
-            this._UnitOfWork = unitOfWork as UnitOfWork;
-        }
-
+                
         [HttpGet]
         [Route ("")]
-        public async Task<ActionResult<List<Pdv>>> Get() {
-            dynamic model = new ExpandoObject();
-            model.Pdv = this._UnitOfWork.PdvRepository.GetAll();
-            return await model.Pdv;
+        public async Task<ActionResult<List<Pdv>>> Get([FromServices] DataContext context)
+        {
+            return await context.Pdvs.ToListAsync();            
         }
 
         [HttpPost]
         [Route("")]
-        public async Task<ActionResult<List<Bill>>> Post([FromBody] Pdv model)
+        public async Task<ActionResult<List<Bill>>> Post(
+            [FromServices] DataContext context,
+            [FromBody] Pdv model)
         {
+            BillRepository billRepository = new BillRepository(context);
             decimal change = model.AmountPaid - model.Price;
             
             //Change limit
             if (change >= 10000)
                 return null;
 
-            this._UnitOfWork.PdvRepository.Add(model);
+            context.Pdvs.Add(model);
             
-            List<Bill> lBills = this._UnitOfWork.BillRepository.CalculateChange(model);
+            List<Bill> lBills = billRepository.CalculateChange(model);
 
-            //this._UnitOfWork.BillRepository.AddRange(lBills);
+            //context.Bills.UpdateRange(lBills);
 
-            await this._UnitOfWork.Commit();
+            context.SaveChanges();
 
             return lBills;
         }
